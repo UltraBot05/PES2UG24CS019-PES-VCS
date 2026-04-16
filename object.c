@@ -116,6 +116,21 @@ int object_write(ObjectType type, const void *data, size_t len, ObjectID *id_out
     ObjectID id;
     compute_hash(obj, obj_len, &id);
 
+    // Step 3: Deduplication
+    if (object_exists(&id)) {
+        *id_out = id;
+        free(obj);
+        return 0;
+    }
+
+    // Step 4: Create shard directory
+    char hex[HASH_HEX_SIZE + 1];
+    hash_to_hex(&id, hex);
+
+    char shard_dir[256];
+    snprintf(shard_dir, sizeof(shard_dir), "%s/%.2s", OBJECTS_DIR, hex);
+    mkdir(shard_dir, 0755);
+
     free(obj);
     return -1; // not done yet
 }
