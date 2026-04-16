@@ -147,7 +147,6 @@ static int write_tree_level(IndexEntry *entries, int count,
         const char *slash = strchr(rel_path, '/');
 
         if (slash == NULL) {
-            // Direct file entry
             TreeEntry *te = &tree.entries[tree.count];
             strncpy(te->name, rel_path, sizeof(te->name) - 1);
             te->name[sizeof(te->name) - 1] = '\0';
@@ -156,31 +155,31 @@ static int write_tree_level(IndexEntry *entries, int count,
             tree.count++;
             i++;
         } else {
-            } else {
-            // Subdirectory entry
             size_t dir_name_len = (size_t)(slash - rel_path);
             char dir_name[256];
+            char sub_prefix[512];
+            size_t sub_prefix_len;
+            int j;
+            ObjectID sub_id;
+            TreeEntry *te;
+
             if (dir_name_len >= sizeof(dir_name)) return -1;
             memcpy(dir_name, rel_path, dir_name_len);
             dir_name[dir_name_len] = '\0';
 
-            char sub_prefix[512];
             snprintf(sub_prefix, sizeof(sub_prefix), "%s%s/", prefix, dir_name);
-            size_t sub_prefix_len = strlen(sub_prefix);
+            sub_prefix_len = strlen(sub_prefix);
 
-            // Count all entries sharing this subdir prefix
-            int j = i;
+            j = i;
             while (j < count &&
                    strncmp(entries[j].path, sub_prefix, sub_prefix_len) == 0) {
                 j++;
             }
 
-            // Recurse
-            ObjectID sub_id;
             if (write_tree_level(entries + i, j - i, sub_prefix, &sub_id) != 0)
                 return -1;
 
-            TreeEntry *te = &tree.entries[tree.count];
+            te = &tree.entries[tree.count];
             strncpy(te->name, dir_name, sizeof(te->name) - 1);
             te->name[sizeof(te->name) - 1] = '\0';
             te->mode = MODE_DIR;
@@ -191,12 +190,15 @@ static int write_tree_level(IndexEntry *entries, int count,
         }
     }
 
-    void *tree_data;
-    size_t tree_len;
-    if (tree_serialize(&tree, &tree_data, &tree_len) != 0) return -1;
-    int rc = object_write(OBJ_TREE, tree_data, tree_len, id_out);
-    free(tree_data);
-    return rc;
+    {
+        void *tree_data;
+        size_t tree_len;
+        int rc;
+        if (tree_serialize(&tree, &tree_data, &tree_len) != 0) return -1;
+        rc = object_write(OBJ_TREE, tree_data, tree_len, id_out);
+        free(tree_data);
+        return rc;
+    }
 }
 
 int tree_from_index(ObjectID *id_out) {
