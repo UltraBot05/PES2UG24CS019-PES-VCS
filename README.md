@@ -367,10 +367,10 @@ The test program verifies:
 - Integrity checking (detects corrupted objects)
 
 **📸 Screenshot 1A:** Output of `./test_objects` showing all tests passing.
-![**📸 Screenshot 1A:** Output of `./test_objects` showing all tests passing.](images/Screenshot%201A.png)
+![📸 Screenshot 1A: Output of ./test_objects</code> showing all tests passing.](images/Screenshot%201A.png)
 
 **📸 Screenshot 1B:** `find .pes/objects -type f` showing the sharded directory structure.
-![**📸 Screenshot 1B:** `find .pes/objects -type f` showing the sharded directory structure.](images/Screenshot%201B.png)
+![📸 Screenshot 1B: find .pes/objects -type f</code> showing the sharded directory structure.](images/Screenshot%201B.png)
 
 ---
 
@@ -402,10 +402,10 @@ The test program verifies:
 - Deterministic serialization (same entries in any order → identical output)
 
 **📸 Screenshot 2A:** Output of `./test_tree` showing all tests passing.
-![**📸 Screenshot 2A:** Output of `./test_tree` showing all tests passing.](images/Screenshot%202A.png)
+![📸 Screenshot 2A: Output of ./test_tree</code> showing all tests passing.](images/Screenshot%202A.png)
 
 **📸 Screenshot 2B:** Pick a tree object from `find .pes/objects -type f` and run `xxd .pes/objects/XX/YYY... | head -20` to show the raw binary format.
-![**📸 Screenshot 2B:** Pick a tree object from `find .pes/objects -type f` and run `xxd .pes/objects/XX/YYY... | head -20` to show the raw binary format.](images/Screenshot%202B.png)
+![📸 Screenshot 2B: Pick a tree object from find .pes/objects -type f</code> and run xxd .pes/objects/XX/YYY... | head -20</code> to show the raw binary format.](images/Screenshot%202B.png)
 
 ---
 
@@ -463,10 +463,10 @@ cat .pes/index    # Human-readable text format
 ```
 
 **📸 Screenshot 3A:** Run `./pes init`, `./pes add file1.txt file2.txt`, `./pes status` — show the output.
-![**📸 Screenshot 3A:** Run `./pes init`, `./pes add file1.txt file2.txt`, `./pes status` — show the output.](images/Screenshot%203A.png)
+![📸 Screenshot 3A: Run ./pes init</code>, ./pes add file1.txt file2.txt</code>, ./pes status</code> — show the output.](images/Screenshot%203A.png)
 
 **📸 Screenshot 3B:** `cat .pes/index` showing the text-format index with your entries.
-![**📸 Screenshot 3B:** `cat .pes/index` showing the text-format index with your entries.](images/Screenshot%203B.png)
+![📸 Screenshot 3B: cat .pes/index</code> showing the text-format index with your entries.](images/Screenshot%203B.png)
 
 ---
 
@@ -516,13 +516,13 @@ make test-integration
 ```
 
 **📸 Screenshot 4A:** Output of `./pes log` showing three commits with hashes, authors, timestamps, and messages.
-![**📸 Screenshot 4A:** Output of `./pes log` showing three commits with hashes, authors, timestamps, and messages.](images/Screenshot%204A.png)
+![📸 Screenshot 4A: Output of ./pes log</code> showing three commits with hashes, authors, timestamps, and messages.](images/Screenshot%204A.png)
 
 **📸 Screenshot 4B:** `find .pes -type f | sort` showing object store growth after three commits.
-![**📸 Screenshot 4B:** `find .pes -type f | sort` showing object store growth after three commits.](images/Screenshot%204B.png)
+![📸 Screenshot 4B: find .pes -type f | sort</code> showing object store growth after three commits.](images/Screenshot%204B.png)
 
 **📸 Screenshot 4C:** `cat .pes/refs/heads/main` and `cat .pes/HEAD` showing the reference chain.
-![**📸 Screenshot 4C:** `cat .pes/refs/heads/main` and `cat .pes/HEAD` showing the reference chain.](images/Screenshot%204C.png)
+![📸 Screenshot 4C: cat .pes/refs/heads/main</code> and cat .pes/HEAD</code> showing the reference chain.](images/Screenshot%204C.png)
 
 ---
 
@@ -631,7 +631,7 @@ How Git avoids this:
 | 4     | 4A | `pes log` output with three commits                             |
 | 4     | 4B | `find .pes -type f \| sort` showing object growth                |
 | 4     | 4C | `cat .pes/refs/heads/main` and `cat .pes/HEAD`                |
-| Final | -- | Full integration test (`make test-integration`)                 |
+| Final | 5  | Screenshot 5: Full integration test (`make test-integration`)   |
 
 ### Code Files Required (5 files)
 
