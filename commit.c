@@ -219,6 +219,23 @@ int commit_create(const char *message, ObjectID *commit_id_out) {
     strncpy(c.author,  pes_author(), sizeof(c.author)  - 1);
     strncpy(c.message, message,      sizeof(c.message) - 1);
 
+    // Step 4: Serialize the commit struct to text
+    void *raw;
+    size_t raw_len;
+    if (commit_serialize(&c, &raw, &raw_len) != 0) {
+        fprintf(stderr, "error: failed to serialize commit\n");
+        return -1;
+    }
+
+    // Step 5: Write the commit object to the object store
+    ObjectID commit_id;
+    if (object_write(OBJ_COMMIT, raw, raw_len, &commit_id) != 0) {
+        free(raw);
+        fprintf(stderr, "error: failed to write commit object\n");
+        return -1;
+    }
+    free(raw);
+
     // More steps to come...
     (void)commit_id_out;
     return -1;
