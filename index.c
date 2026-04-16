@@ -143,10 +143,52 @@ static int compare_index_entries(const void *a, const void *b) {
 //
 // Returns 0 on success, -1 on error.
 int index_load(Index *index) {
-    // TODO: Implement index loading
-    // (See Lab Appendix for logical steps)
-    (void)index;
-    return -1;
+    index->count = 0;
+
+    FILE *f = fopen(INDEX_FILE, "r");
+    if (!f) {
+        // Missing index file means empty staging area.
+        return 0;
+    }
+
+    char line[1024];
+    while (fgets(line, sizeof(line), f) != NULL) {
+        unsigned int mode = 0;
+        char hex[HASH_HEX_SIZE + 1];
+        unsigned long long mtime = 0;
+        unsigned int size = 0;
+        char path[512];
+
+        if (line[0] == '\n' || line[0] == '\0') continue;
+
+        if (index->count >= MAX_INDEX_ENTRIES) {
+            fclose(f);
+            return -1;
+        }
+
+        // Expected: <mode> <hash> <mtime> <size> <path>
+        if (sscanf(line, "%o %64s %llu %u %511s",
+                   &mode, hex, &mtime, &size, path) != 5) {
+            fclose(f);
+            return -1;
+        }
+
+        IndexEntry *e = &index->entries[index->count];
+        e->mode = (uint32_t)mode;
+        if (hex_to_hash(hex, &e->hash) != 0) {
+            fclose(f);
+            return -1;
+        }
+        e->mtime_sec = (uint64_t)mtime;
+        e->size = (uint32_t)size;
+        strncpy(e->path, path, sizeof(e->path) - 1);
+        e->path[sizeof(e->path) - 1] = '\0';
+
+        index->count++;
+    }
+
+    fclose(f);
+    return 0;
 }
 
 // Save the index to .pes/index atomically.
