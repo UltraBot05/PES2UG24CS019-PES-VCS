@@ -201,7 +201,25 @@ int commit_create(const char *message, ObjectID *commit_id_out) {
         return -1;
     }
 
+    // Step 2: Read the parent commit (if any)
+    Commit c;
+    memset(&c, 0, sizeof(c));
+
+    ObjectID parent_id;
+    if (head_read(&parent_id) == 0) {
+        c.has_parent = 1;
+        c.parent     = parent_id;
+    } else {
+        c.has_parent = 0;
+    }
+
+    // Step 3: Fill in the commit fields
+    c.tree      = tree_id;
+    c.timestamp = (uint64_t)time(NULL);
+    strncpy(c.author,  pes_author(), sizeof(c.author)  - 1);
+    strncpy(c.message, message,      sizeof(c.message) - 1);
+
     // More steps to come...
-    (void)message; (void)commit_id_out;
+    (void)commit_id_out;
     return -1;
 }
